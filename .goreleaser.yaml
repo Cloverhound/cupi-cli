@@ -1,0 +1,50 @@
+version: 2
+
+project_name: cupi
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - binary: cupi
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X github.com/Cloverhound/cupi-cli/cmd.Version={{.Version}}
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - formats:
+      - tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+
+checksum:
+  name_template: "checksums.txt"
+
+release:
+  github:
+    owner: Cloverhound
+    name: cupi-cli
+  draft: false
+  prerelease: auto
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - Merge pull request
+      - Merge branch

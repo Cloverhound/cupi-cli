@@ -1,0 +1,26 @@
+# Binary
+cupi
+
+# Integration test binaries/artifacts
+*.test
+
+# Go build artifacts
+*.test
+*.out
+
+# Scraper output
+api_reference.json
+api_reference.md
+tools/*.pdf
+
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude Code
+.claude/
