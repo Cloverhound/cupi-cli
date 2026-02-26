@@ -8,35 +8,35 @@ user-invocable: true
 
 ## Setup
 
-The `cupi` binary must be built and available in PATH:
+The `cupi-cli` binary must be built and available in PATH:
 
 ```bash
 bash install-local.sh
 # or build manually:
-go build -o cupi .
+go build -o cupi-cli .
 ```
 
 ## Authentication
 
 ```bash
 # Login — tests connectivity and saves credentials
-cupi auth login --host cuc.example.com --username admin --server prod --default
+cupi-cli auth login --host cuc.example.com --username admin --server prod --default
 
 # Add additional credential types to an existing server
-cupi auth set-credentials --type application --username app-user --server prod
-cupi auth set-credentials --type platform    --username os-admin  --server prod
+cupi-cli auth set-credentials --type application --username app-user --server prod
+cupi-cli auth set-credentials --type platform    --username os-admin  --server prod
 
 # Show credential status
-cupi auth status [--server prod]
+cupi-cli auth status [--server prod]
 
 # Switch the default server
-cupi auth switch prod
+cupi-cli auth switch prod
 
 # List all configured servers
-cupi auth list
+cupi-cli auth list
 
 # Logout — removes credentials from secure storage
-cupi auth logout [--server prod] [--type cupi|application|platform|all]
+cupi-cli auth logout [--server prod] [--type cupi|application|platform|all]
 ```
 
 Passwords are stored in the **OS keystore** (macOS Keychain, Windows Credential Manager, Linux Secret Service). Server config (hostnames, usernames, default server) is stored in `~/.cupi-cli/config.json` — no passwords on disk.
@@ -49,7 +49,7 @@ Passwords are stored in the **OS keystore** (macOS Keychain, Windows Credential 
 
 ## Command Discovery
 
-Run `cupi --help` to list all available commands. Run `cupi <command> --help` for exact flags.
+Run `cupi-cli --help` to list all available commands. Run `cupi-cli <command> --help` for exact flags.
 
 ## Global Flags
 
@@ -65,86 +65,86 @@ Run `cupi --help` to list all available commands. Run `cupi <command> --help` fo
 
 ```bash
 # Users (mailboxes)
-cupi users list
-cupi users list --max 50
-cupi users list --query "(alias startswith j)"
-cupi users get jsmith
-cupi users get jsmith --output json
-cupi users add --alias jsmith --dtmf 1001 --first-name John --last-name Smith
-cupi users update jsmith --display-name "John Smith" --department Engineering
-cupi users remove jsmith
+cupi-cli users list
+cupi-cli users list --max 50
+cupi-cli users list --query "(alias startswith j)"
+cupi-cli users get jsmith
+cupi-cli users get jsmith --output json
+cupi-cli users add --alias jsmith --dtmf 1001 --first-name John --last-name Smith
+cupi-cli users update jsmith --display-name "John Smith" --department Engineering
+cupi-cli users remove jsmith
 
 # Distribution Lists
-cupi distlists list
-cupi distlists get allvoicemail
-cupi distlists add --alias mylist --display-name "My List"
-cupi distlists update mylist --display-name "Updated List"
-cupi distlists remove mylist
-cupi distlists members list mylist
-cupi distlists members add mylist <member-objectId>
-cupi distlists members remove mylist <member-objectId>
+cupi-cli distlists list
+cupi-cli distlists get allvoicemail
+cupi-cli distlists add --alias mylist --display-name "My List"
+cupi-cli distlists update mylist --display-name "Updated List"
+cupi-cli distlists remove mylist
+cupi-cli distlists members list mylist
+cupi-cli distlists members add mylist <member-objectId>
+cupi-cli distlists members remove mylist <member-objectId>
 
 # Call Handlers
-cupi handlers list
-cupi handlers get "Opening Greeting"
-cupi handlers add --display-name "My Handler" --template-id <objectId>
-cupi handlers update "My Handler" --dtmf 9999
-cupi handlers remove "My Handler"
+cupi-cli handlers list
+cupi-cli handlers get "Opening Greeting"
+cupi-cli handlers add --display-name "My Handler" --template-id <objectId>
+cupi-cli handlers update "My Handler" --dtmf 9999
+cupi-cli handlers remove "My Handler"
 
 # Class of Service
-cupi cos list
-cupi cos get UnityMailboxTemplate
-cupi cos update UnityMailboxTemplate --display-name "Updated COS"
+cupi-cli cos list
+cupi-cli cos get UnityMailboxTemplate
+cupi-cli cos update UnityMailboxTemplate --display-name "Updated COS"
 
 # User Templates
-cupi templates list
-cupi templates get voicemailusertemplate
+cupi-cli templates list
+cupi-cli templates get voicemailusertemplate
 
 # Schedules
-cupi schedules list
-cupi schedules get "Weekdays"
+cupi-cli schedules list
+cupi-cli schedules get "Weekdays"
 
 # System Info
-cupi system
-cupi system --output json
+cupi-cli system
+cupi-cli system --output json
 ```
 
 ## AST — System Health Monitoring
 
 ```bash
-cupi ast disk                     # Disk partition usage
-cupi ast heartbeat                # Heartbeat rates
-cupi ast tftp                     # TFTP server statistics
-cupi ast alerts                   # All system alerts
-cupi ast alerts --triggered       # Only currently triggered alerts
-cupi ast perfmon                  # Perfmon object catalog
-cupi ast perfmon --output json | jq '.[0]'
+cupi-cli ast disk                     # Disk partition usage
+cupi-cli ast heartbeat                # Heartbeat rates
+cupi-cli ast tftp                     # TFTP server statistics
+cupi-cli ast alerts                   # All system alerts
+cupi-cli ast alerts --triggered       # Only currently triggered alerts
+cupi-cli ast perfmon                  # Perfmon object catalog
+cupi-cli ast perfmon --output json | jq '.[0]'
 ```
 
 ## PAWS — Platform Administration
 
-Requires platform credentials (`cupi auth set-credentials --type platform --username admin`).
+Requires platform credentials (`cupi-cli auth set-credentials --type platform --username admin`).
 
 ```bash
-cupi paws cluster status          # OS-level cluster node info
-cupi paws cluster replication     # Replication health check
-cupi paws drs status              # DRS backup/restore status
-cupi paws drs backup --sftp-server 10.0.0.5 --sftp-user backup --sftp-password secret --sftp-dir /backups
+cupi-cli paws cluster status          # OS-level cluster node info
+cupi-cli paws cluster replication     # Replication health check
+cupi-cli paws drs status              # DRS backup/restore status
+cupi-cli paws drs backup --sftp-server 10.0.0.5 --sftp-user backup --sftp-password secret --sftp-dir /backups
 ```
 
 ## DIME — Log File Downloads
 
 ```bash
-cupi dime get-file /var/log/active/syslog/CiscoSyslog > syslog.txt
-cupi dime get-file /var/log/active/tomcat/catalina.out --output /tmp/catalina.out
-cupi dime get-file syslog/CiscoSyslog --node 10.0.0.5
+cupi-cli dime get-file /var/log/active/syslog/CiscoSyslog > syslog.txt
+cupi-cli dime get-file /var/log/active/tomcat/catalina.out --output /tmp/catalina.out
+cupi-cli dime get-file syslog/CiscoSyslog --node 10.0.0.5
 ```
 
 ## Multi-server
 
 ```bash
-cupi users list --server lab
-cupi auth switch prod
+cupi-cli users list --server lab
+cupi-cli auth switch prod
 ```
 
 ## Phase 1 Scraper

@@ -25,9 +25,9 @@ Go CLI tool (`cupi`) for Cisco Unity Connection (CUC). Wraps:
 ## Development
 
 ```bash
-go build -o cupi .        # Build
-./cupi --help             # Verify
-bash install-local.sh     # Install binary + skill
+go build -o cupi-cli .        # Build
+./cupi-cli --help             # Verify
+bash install-local.sh         # Install binary + skill
 go run ./tools/scraper/   # Run API doc scraper
 ```
 

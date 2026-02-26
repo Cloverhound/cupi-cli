@@ -2,7 +2,7 @@
 # install-local.sh — build from source and install cupi + Claude Code skill
 set -euo pipefail
 
-BINARY="cupi"
+BINARY="cupi-cli"
 SKILL_NAME="cupi-cli"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 SKILL_DIR="$HOME/.claude/skills/$SKILL_NAME"
@@ -40,4 +40,4 @@ if ! command -v "$BINARY" &>/dev/null; then
   echo ""
 fi
 
-echo "Run 'cupi --help' to get started."
+echo "Run 'cupi-cli --help' to get started."
