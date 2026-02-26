@@ -1,0 +1,60 @@
+package main
+
+// baseURL is the base for all CUPI API documentation chapter URLs.
+const baseURL = "https://www.cisco.com/c/en/us/td/docs/voice_ip_comm/connection/REST-API/CUPI_API/b_CUPI-API/"
+
+// chapters contains all 49 known chapter filenames from the CUPI API docs TOC.
+var chapters = []struct {
+	Name string
+	File string
+}{
+	{"API Overview", "m_api-overview.html"},
+	{"Authentication and Authorization", "m_authentication-and-authorization.html"},
+	{"User API", "m_cupi-api-user-api.html"},
+	{"Call Handler API", "m-call-handler.html"},
+	{"Distribution List API", "m-cupi-api-for-distribution-list.html"},
+	{"Class of Service API", "m_cupi-api-class-of-service-apis.html"},
+	{"Schedules API", "m-schedules.html"},
+	{"System Settings", "m-system-settings.html"},
+	{"Mailbox", "m_mailbox.html"},
+	{"LDAP", "m_ldap.html"},
+	{"Personal Call Transfer Rules", "m_personal-call-transfer-rules.html"},
+	{"Notification Devices", "m_notification-devices.html"},
+	{"Roles", "m_roles.html"},
+	{"User Templates", "m_user-templates.html"},
+	{"Alternate Extensions", "m_alternate-extensions.html"},
+	{"MWI", "m_mwi.html"},
+	{"Greetings", "m_greetings.html"},
+	{"Caller Input", "m_caller-input.html"},
+	{"Transfer Options", "m_transfer-options.html"},
+	{"After Message Actions", "m_after-message-actions.html"},
+	{"Message Handlers", "m_message-handlers.html"},
+	{"Name", "m_name.html"},
+	{"One Key Dialing", "m_one-key-dialing.html"},
+	{"Interview Handlers", "m_interview-handlers.html"},
+	{"Routing Rules", "m_routing-rules.html"},
+	{"Directory Handlers", "m_directory-handlers.html"},
+	{"VPIM", "m_vpim.html"},
+	{"SMTP", "m_smtp.html"},
+	{"System Contacts", "m_system-contacts.html"},
+	{"Phone System", "m_phone-system.html"},
+	{"Port Groups", "m_port-groups.html"},
+	{"Ports", "m_ports.html"},
+	{"Location", "m_location.html"},
+	{"Network", "m_network.html"},
+	{"Partition", "m_partition.html"},
+	{"Search Space", "m_search-space.html"},
+	{"Time Zone", "m_time-zone.html"},
+	{"Restriction Tables", "m_restriction-tables.html"},
+	{"Fax", "m_fax.html"},
+	{"Reports", "m_reports.html"},
+	{"Bulk Administration", "m_bulk-administration.html"},
+	{"Licensing", "m_licensing.html"},
+	{"Cluster", "m_cluster.html"},
+	{"Cos Restriction Tables", "m_cos-restriction-tables.html"},
+	{"External Services", "m_external-services.html"},
+	{"Conversation", "m_conversation.html"},
+	{"Tenant", "m_tenant.html"},
+	{"Users with Mailbox", "m_users-with-mailbox.html"},
+	{"Conference Call Handler", "m_conference-call-handler.html"},
+}

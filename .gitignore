@@ -1,0 +1,19 @@
+# Binary
+cupi
+
+# Go build artifacts
+*.test
+*.out
+
+# Scraper output
+api_reference.json
+api_reference.md
+
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
