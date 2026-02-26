@@ -1,4 +1,4 @@
-# cupi-cli — Cisco Unity Connection CLI
+# cupi — Cisco Unity Connection CLI
 
 ## Overview
 
@@ -10,9 +10,9 @@ Go CLI tool (`cupi`) for Cisco Unity Connection (CUC). Wraps:
 
 ## Key Paths
 
-- Config: `~/.cupi-cli/config.json` (servers map, not `clusters`)
-- Keyring service: `cupi-cli`
-- Module: `github.com/Cloverhound/cupi-cli`
+- Config: `~/.cupi/config.json` (servers map, not `clusters`)
+- Keyring service: `cupi`
+- Module: `github.com/Cloverhound/cupi`
 - Binary: `cupi`
 - Env vars: `CUPI_DEBUG`, `CUPI_DRY_RUN`
 
@@ -25,8 +25,8 @@ Go CLI tool (`cupi`) for Cisco Unity Connection (CUC). Wraps:
 ## Development
 
 ```bash
-go build -o cupi-cli .        # Build
-./cupi-cli --help             # Verify
+go build -o cupi .        # Build
+./cupi --help             # Verify
 bash install-local.sh         # Install binary + skill
 go run ./tools/scraper/   # Run API doc scraper
 ```
@@ -34,7 +34,7 @@ go run ./tools/scraper/   # Run API doc scraper
 ## Architecture
 
 - `internal/appconfig/` — `ServerConfig` (not `ClusterConfig`), `defaultServer`, `servers`
-- `internal/auth/` — `CredTypeCUPI="cupi"`, keyring service `"cupi-cli"`
+- `internal/auth/` — `CredTypeCUPI="cupi"`, keyring service `"cupi"`
 - `internal/client/rest.go` — JSON REST: `Request/Get/Post/Put/Delete`
 - `internal/client/ast.go` — VOS-common AST only (disk, tftp, heartbeat, alerts, perfmon)
 - `internal/client/paws.go` — PAWS SOAP (identical to cucm-cli, CUPI_DEBUG)

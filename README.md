@@ -1,4 +1,4 @@
-# cupi-cli
+# cupi
 
 A command-line tool for querying and managing Cisco Unity Connection (CUC) voicemail servers via CUPI REST, PAWS, AST, and DIME APIs.
 
@@ -7,34 +7,34 @@ A command-line tool for querying and managing Cisco Unity Connection (CUC) voice
 **From source**
 
 ```bash
-git clone https://github.com/Cloverhound/cupi-cli.git
-cd cupi-cli
+git clone https://github.com/Cloverhound/cupi.git
+cd cupi
 bash install-local.sh
 ```
 
 Or build manually:
 
 ```bash
-go build -o cupi-cli .
+go build -o cupi .
 ```
 
 ## Quick Start
 
 ```bash
 # Authenticate — saves credentials to OS keystore
-cupi-cli auth login --host cuc.example.com --username admin --server prod --default
+cupi auth login --host cuc.example.com --username admin --server prod --default
 
 # List mailbox users
-cupi-cli users list
+cupi users list
 
 # Get a specific user
-cupi-cli users get jsmith
+cupi users get jsmith
 
 # Add a user
-cupi-cli users add --alias jsmith --dtmf 1001 --first-name John --last-name Smith
+cupi users add --alias jsmith --dtmf 1001 --first-name John --last-name Smith
 
 # Use a different server for one command
-cupi-cli users list --server lab
+cupi users list --server lab
 ```
 
 ## API Coverage
@@ -55,11 +55,11 @@ cupi-cli users list --server lab
 
 ## Authentication
 
-`cupi-cli auth login` tests connectivity and saves credentials:
+`cupi auth login` tests connectivity and saves credentials:
 
 1. GET `/vmrest/users?rowsPerPage=0` with Basic Auth
 2. Validates credentials against the CUC server
-3. Saves server config to `~/.cupi-cli/config.json`
+3. Saves server config to `~/.cupi/config.json`
 4. Stores password in the OS keystore
 
 Three credential types are supported per server:
@@ -72,14 +72,14 @@ Three credential types are supported per server:
 
 ```bash
 # Login (CUPI credentials)
-cupi-cli auth login --host cuc.example.com --username admin --server prod --default
+cupi auth login --host cuc.example.com --username admin --server prod --default
 
 # Add additional credential types
-cupi-cli auth set-credentials --type application --username app-user --server prod
-cupi-cli auth set-credentials --type platform    --username os-admin  --server prod
+cupi auth set-credentials --type application --username app-user --server prod
+cupi auth set-credentials --type platform    --username os-admin  --server prod
 
 # Show credential status
-cupi-cli auth status [--server prod]
+cupi auth status [--server prod]
 
 # Output:
 # server=prod (default)  host=cuc.example.com  version=15.0
@@ -88,8 +88,8 @@ cupi-cli auth status [--server prod]
 #   platform   : os-admin  [set]
 
 # Logout one type or all
-cupi-cli auth logout --server prod --type application
-cupi-cli auth logout --server prod --type all
+cupi auth logout --server prod --type application
+cupi auth logout --server prod --type all
 ```
 
 ## Output Formats
@@ -102,8 +102,8 @@ cupi-cli auth logout --server prod --type all
 | Raw | `--output raw` | Raw API response |
 
 ```bash
-cupi-cli users list --output json | jq '.[].Alias'
-cupi-cli users list --output csv > users.csv
+cupi users list --output json | jq '.[].Alias'
+cupi users list --output csv > users.csv
 ```
 
 ## Global Flags
@@ -121,14 +121,14 @@ cupi-cli users list --output csv > users.csv
 Preview write operations without applying them:
 
 ```bash
-cupi-cli --dry-run users add --alias jsmith --dtmf 1001 --first-name John --last-name Smith
-cupi-cli --dry-run users remove jsmith
-cupi-cli --dry-run distlists add --alias mylist --display-name "My List"
+cupi --dry-run users add --alias jsmith --dtmf 1001 --first-name John --last-name Smith
+cupi --dry-run users remove jsmith
+cupi --dry-run distlists add --alias mylist --display-name "My List"
 ```
 
 ## Configuration
 
-Server configuration is stored in `~/.cupi-cli/config.json`:
+Server configuration is stored in `~/.cupi/config.json`:
 
 ```json
 {
@@ -161,31 +161,31 @@ Passwords are stored in the **OS keystore** (macOS Keychain, Windows Credential 
 ## AST — System Health Monitoring
 
 ```bash
-cupi-cli ast disk                     # Disk partition usage
-cupi-cli ast heartbeat                # Heartbeat rates
-cupi-cli ast tftp                     # TFTP server statistics
-cupi-cli ast alerts                   # All system alerts
-cupi-cli ast alerts --triggered       # Only currently triggered alerts
-cupi-cli ast perfmon                  # Perfmon object catalog
+cupi ast disk                     # Disk partition usage
+cupi ast heartbeat                # Heartbeat rates
+cupi ast tftp                     # TFTP server statistics
+cupi ast alerts                   # All system alerts
+cupi ast alerts --triggered       # Only currently triggered alerts
+cupi ast perfmon                  # Perfmon object catalog
 ```
 
 ## PAWS — Platform Administration
 
-Requires platform credentials (`cupi-cli auth set-credentials --type platform`).
+Requires platform credentials (`cupi auth set-credentials --type platform`).
 
 ```bash
-cupi-cli paws cluster status          # OS-level cluster node info
-cupi-cli paws cluster replication     # Replication health check
-cupi-cli paws drs status              # DRS backup/restore status
-cupi-cli paws drs backup --sftp-server 10.0.0.5 --sftp-user backup --sftp-password secret --sftp-dir /backups
+cupi paws cluster status          # OS-level cluster node info
+cupi paws cluster replication     # Replication health check
+cupi paws drs status              # DRS backup/restore status
+cupi paws drs backup --sftp-server 10.0.0.5 --sftp-user backup --sftp-password secret --sftp-dir /backups
 ```
 
 ## DIME — Log File Downloads
 
 ```bash
-cupi-cli dime get-file /var/log/active/syslog/CiscoSyslog > syslog.txt
-cupi-cli dime get-file /var/log/active/tomcat/catalina.out --output /tmp/catalina.out
-cupi-cli dime get-file syslog/CiscoSyslog --node 10.0.0.5
+cupi dime get-file /var/log/active/syslog/CiscoSyslog > syslog.txt
+cupi dime get-file /var/log/active/tomcat/catalina.out --output /tmp/catalina.out
+cupi dime get-file syslog/CiscoSyslog --node 10.0.0.5
 ```
 
 ## Claude Code Integration
@@ -198,7 +198,7 @@ See [`CLAUDE.md`](CLAUDE.md) for the full development guide including project la
 
 ```bash
 # Build
-go build -o cupi-cli .
+go build -o cupi .
 
 # Run integration tests (requires live CUC server)
 CUPI_TEST_HOST=cuc.example.com CUPI_TEST_USER=admin CUPI_TEST_PASS=secret \

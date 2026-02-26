@@ -19,9 +19,9 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cupi-cli",
+	Use:   "cupi",
 	Short: "Cisco Unity Connection CLI management tool",
-	Long: `cupi-cli is a command-line tool for querying and managing Cisco Unity Connection (CUC) servers.
+	Long: `cupi is a command-line tool for querying and managing Cisco Unity Connection (CUC) servers.
 It provides access to CUPI REST, PAWS, AST, and DIME APIs for voicemail user, distribution list, and system management.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		if debugFlag {
@@ -88,7 +88,7 @@ func resolveServer(cmd *cobra.Command) (string, error) {
 	}
 
 	if cfg.DefaultServer == "" {
-		return "", fmt.Errorf("no default server configured; use --server flag or run 'cupi-cli auth login'")
+		return "", fmt.Errorf("no default server configured; use --server flag or run 'cupi auth login'")
 	}
 
 	return cfg.DefaultServer, nil
