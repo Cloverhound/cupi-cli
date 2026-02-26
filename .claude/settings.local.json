@@ -62,7 +62,10 @@
       "Bash(git add .gitignore tests/ && git status)",
       "Bash(git add .github/ .goreleaser.yaml .claude/)",
       "Bash(git commit -m \"$\\(cat <<'EOF'\nAdd release tracking and upgrade capabilities\n\n- Add .goreleaser.yaml for multi-platform binary builds \\(darwin/linux/windows, amd64/arm64\\) with version injection via ldflags\n- Add GitHub Actions CI workflow \\(build + vet on push/PR\\)\n- Add GitHub Actions release workflow triggered on v* tags via GoReleaser\n- Add .claude/settings.local.json for project tooling config\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git add .claude/settings.local.json && git commit -m \"$\\(cat <<'EOF'\nUpdate .claude/settings.local.json with recorded allowed commands\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git add .claude/settings.local.json && git commit -m \"$\\(cat <<'EOF'\nUpdate .claude/settings.local.json with recorded allowed commands\n\nCo-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git pull --rebase)",
+      "Bash(git add .claude/settings.local.json && git stash && git pull --rebase && git stash pop)"
     ]
   }
 }
