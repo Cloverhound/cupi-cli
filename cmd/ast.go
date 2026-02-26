@@ -19,4 +19,5 @@ func init() {
 	astCmd.AddCommand(astHeartbeatCmd)
 	astCmd.AddCommand(astAlertsCmd)
 	astCmd.AddCommand(astPerfmonCmd)
+	astCmd.AddCommand(astServicesCmd)
 }

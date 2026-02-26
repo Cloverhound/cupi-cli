@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 )
@@ -346,4 +347,266 @@ func GetASTPerfmonObjects(host, user, pass string) ([]ASTPerfmonObject, error) {
 	}
 
 	return results, nil
+}
+
+// ASTPerfmonCounter represents a perfmon counter with description
+type ASTPerfmonCounter struct {
+	Host        string
+	ObjectName  string
+	CounterName string
+	Description string
+	Unit        string
+	IsExcluded  bool
+}
+
+// GetASTPerfmonCounters retrieves detailed counter list for a specific perfmon object.
+// Query: PerfmonListCounter&Host=<host>&Object=<objectName>
+func GetASTPerfmonCounters(host, user, pass, objectName string) ([]ASTPerfmonCounter, error) {
+	query := fmt.Sprintf("PerfmonListCounter&Host=%s&Object=%s",
+		url.QueryEscape(host), url.QueryEscape(objectName))
+	body, err := astGet(host, user, pass, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var reply struct {
+		ReturnCode string `xml:"ReturnCode,attr"`
+		Clusters   []struct {
+			Name  string `xml:"Name,attr"`
+			Hosts []struct {
+				Name    string `xml:"Name,attr"`
+				Objects []struct {
+					Name     string `xml:"Name,attr"`
+					Counters []struct {
+						Name        string `xml:"Name,attr"`
+						IsExcluded  string `xml:"IsExcluded,attr"`
+						Description string `xml:"Description,attr"`
+						Unit        string `xml:"Unit,attr"`
+					} `xml:"Counter"`
+				} `xml:"Object"`
+			} `xml:"Host"`
+		} `xml:"Cluster"`
+	}
+
+	if err := xml.Unmarshal(body, &reply); err != nil {
+		return nil, fmt.Errorf("failed to parse perfmon counters: %w", err)
+	}
+
+	if reply.ReturnCode != "0" {
+		return nil, fmt.Errorf("perfmon counter request returned error code: %s", reply.ReturnCode)
+	}
+
+	var results []ASTPerfmonCounter
+	for _, cluster := range reply.Clusters {
+		for _, h := range cluster.Hosts {
+			for _, obj := range h.Objects {
+				for _, c := range obj.Counters {
+					results = append(results, ASTPerfmonCounter{
+						Host:        h.Name,
+						ObjectName:  obj.Name,
+						CounterName: c.Name,
+						Description: c.Description,
+						Unit:        c.Unit,
+						IsExcluded:  c.IsExcluded == "true",
+					})
+				}
+			}
+		}
+	}
+
+	return results, nil
+}
+
+// ASTPerfmonDataPoint represents a collected real-time perfmon counter value
+type ASTPerfmonDataPoint struct {
+	Host        string
+	ObjectName  string
+	Instance    string
+	CounterName string
+	Value       string
+	CStatus     string
+}
+
+// GetASTPerfmonData collects real-time counter values for a specific perfmon object.
+// Query: PerfmonCollectCounterData&Host=<host>&Object=<objectName>
+func GetASTPerfmonData(host, user, pass, objectName string) ([]ASTPerfmonDataPoint, error) {
+	query := fmt.Sprintf("PerfmonCollectCounterData&Host=%s&Object=%s",
+		url.QueryEscape(host), url.QueryEscape(objectName))
+	body, err := astGet(host, user, pass, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var reply struct {
+		ReturnCode string `xml:"ReturnCode,attr"`
+		Clusters   []struct {
+			Name  string `xml:"Name,attr"`
+			Hosts []struct {
+				Name    string `xml:"Name,attr"`
+				Objects []struct {
+					Name      string `xml:"Name,attr"`
+					Instances []struct {
+						Name     string `xml:"Name,attr"`
+						Counters []struct {
+							Name    string `xml:"Name,attr"`
+							Value   string `xml:"Value,attr"`
+							CStatus string `xml:"CStatus,attr"`
+						} `xml:"Counter"`
+					} `xml:"Instance"`
+				} `xml:"Object"`
+			} `xml:"Host"`
+		} `xml:"Cluster"`
+	}
+
+	if err := xml.Unmarshal(body, &reply); err != nil {
+		return nil, fmt.Errorf("failed to parse perfmon data: %w", err)
+	}
+
+	if reply.ReturnCode != "0" {
+		return nil, fmt.Errorf("perfmon collect request returned error code: %s", reply.ReturnCode)
+	}
+
+	var results []ASTPerfmonDataPoint
+	for _, cluster := range reply.Clusters {
+		for _, h := range cluster.Hosts {
+			for _, obj := range h.Objects {
+				for _, inst := range obj.Instances {
+					for _, c := range inst.Counters {
+						results = append(results, ASTPerfmonDataPoint{
+							Host:        h.Name,
+							ObjectName:  obj.Name,
+							Instance:    inst.Name,
+							CounterName: c.Name,
+							Value:       c.Value,
+							CStatus:     c.CStatus,
+						})
+					}
+				}
+			}
+		}
+	}
+
+	return results, nil
+}
+
+// ASTService represents a VOS service entry
+type ASTService struct {
+	ServiceName   string
+	ServiceStatus string
+	StartupType   string
+	ReasonCode    string
+	NodeName      string
+}
+
+// GetASTServiceList retrieves the list of services on the CUC node.
+// Query: GetServiceList&NodeName=<host>
+func GetASTServiceList(host, user, pass string) ([]ASTService, error) {
+	query := fmt.Sprintf("GetServiceList&NodeName=%s", url.QueryEscape(host))
+	body, err := astGet(host, user, pass, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var reply struct {
+		ReturnCode  string `xml:"ReturnCode,attr"`
+		ServiceList []struct {
+			ServiceName   string `xml:"ServiceName,attr"`
+			ServiceStatus string `xml:"ServiceStatus,attr"`
+			StartupType   string `xml:"StartupType,attr"`
+			ReasonCode    string `xml:"ReasonCode,attr"`
+			NodeName      string `xml:"NodeName,attr"`
+		} `xml:"ServiceInfoList>service"`
+	}
+
+	if err := xml.Unmarshal(body, &reply); err != nil {
+		return nil, fmt.Errorf("failed to parse service list: %w", err)
+	}
+
+	if reply.ReturnCode != "0" {
+		return nil, fmt.Errorf("service list request returned error code: %s", reply.ReturnCode)
+	}
+
+	var results []ASTService
+	for _, s := range reply.ServiceList {
+		results = append(results, ASTService{
+			ServiceName:   s.ServiceName,
+			ServiceStatus: s.ServiceStatus,
+			StartupType:   s.StartupType,
+			ReasonCode:    s.ReasonCode,
+			NodeName:      s.NodeName,
+		})
+	}
+
+	return results, nil
+}
+
+// DoASTServiceAction performs a Start, Stop, or Restart action on a named VOS service.
+// Query: DoServiceAction&NodeName=<host>&ServiceName=<name>&Action=<action>
+func DoASTServiceAction(host, user, pass, serviceName, action string) error {
+	query := fmt.Sprintf("DoServiceAction&NodeName=%s&ServiceName=%s&Action=%s",
+		url.QueryEscape(host), url.QueryEscape(serviceName), url.QueryEscape(action))
+	_, err := astGet(host, user, pass, query)
+	return err
+}
+
+// ASTAlertDetail represents detailed information for a single alert
+type ASTAlertDetail struct {
+	AlertID           string
+	DisplayName       string
+	Group             string
+	Description       string
+	IsEnabled         bool
+	IsTriggered       bool
+	IsWithinSafeRange bool
+	ThresholdType     string
+	ThresholdValue    string
+	Severity          string
+}
+
+// GetASTAlertDetail retrieves detailed information for a specific alert by ID.
+// Query: GetAlertDetail&AlertID=<id>
+func GetASTAlertDetail(host, user, pass, alertID string) (*ASTAlertDetail, error) {
+	query := fmt.Sprintf("GetAlertDetail&AlertID=%s", url.QueryEscape(alertID))
+	body, err := astGet(host, user, pass, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var reply struct {
+		ReturnCode string `xml:"ReturnCode,attr"`
+		Detail     struct {
+			AlertID           string `xml:"AlertID,attr"`
+			DisplayName       string `xml:"DisplayName,attr"`
+			Group             string `xml:"Group,attr"`
+			Description       string `xml:"Description,attr"`
+			IsEnabled         string `xml:"IsEnabled,attr"`
+			IsTriggered       string `xml:"IsTriggered,attr"`
+			IsWithinSafeRange string `xml:"IsWithinSafeRange,attr"`
+			ThresholdType     string `xml:"ThresholdType,attr"`
+			ThresholdValue    string `xml:"ThresholdValue,attr"`
+			Severity          string `xml:"Severity,attr"`
+		} `xml:"AlertDetail"`
+	}
+
+	if err := xml.Unmarshal(body, &reply); err != nil {
+		return nil, fmt.Errorf("failed to parse alert detail: %w", err)
+	}
+
+	if reply.ReturnCode != "0" {
+		return nil, fmt.Errorf("alert detail request returned error code: %s", reply.ReturnCode)
+	}
+
+	d := reply.Detail
+	return &ASTAlertDetail{
+		AlertID:           d.AlertID,
+		DisplayName:       d.DisplayName,
+		Group:             d.Group,
+		Description:       d.Description,
+		IsEnabled:         d.IsEnabled == "1",
+		IsTriggered:       d.IsTriggered == "1",
+		IsWithinSafeRange: d.IsWithinSafeRange == "1",
+		ThresholdType:     d.ThresholdType,
+		ThresholdValue:    d.ThresholdValue,
+		Severity:          d.Severity,
+	}, nil
 }

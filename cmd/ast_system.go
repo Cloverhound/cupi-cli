@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/Cloverhound/cupi-cli/internal/appconfig"
-	"github.com/Cloverhound/cupi-cli/internal/auth"
 	"github.com/Cloverhound/cupi-cli/internal/client"
 	"github.com/Cloverhound/cupi-cli/internal/output"
 	"github.com/spf13/cobra"
@@ -20,27 +18,12 @@ var astDiskCmd = &cobra.Command{
 }
 
 func runASTDisk(cmd *cobra.Command, args []string) error {
-	serverName, err := resolveServer(cmd)
+	srv, user, pass, err := resolveCredentials(cmd, "cupi")
 	if err != nil {
 		return err
 	}
 
-	cfg, err := appconfig.LoadConfig()
-	if err != nil {
-		return fmt.Errorf("failed to load config: %w", err)
-	}
-
-	serverCfg, err := appconfig.GetServer(cfg, serverName)
-	if err != nil {
-		return err
-	}
-
-	user, pass, err := auth.ResolveCreds(serverCfg, auth.CredTypeCUPI)
-	if err != nil {
-		return fmt.Errorf("failed to resolve credentials: %w", err)
-	}
-
-	partitions, err := client.GetASTDiskInfo(serverCfg.Host, user, pass)
+	partitions, err := client.GetASTDiskInfo(srv.Host, user, pass)
 	if err != nil {
 		return fmt.Errorf("failed to get disk info: %w", err)
 	}
@@ -68,27 +51,12 @@ var astTftpCmd = &cobra.Command{
 }
 
 func runASTTftp(cmd *cobra.Command, args []string) error {
-	serverName, err := resolveServer(cmd)
+	srv, user, pass, err := resolveCredentials(cmd, "cupi")
 	if err != nil {
 		return err
 	}
 
-	cfg, err := appconfig.LoadConfig()
-	if err != nil {
-		return fmt.Errorf("failed to load config: %w", err)
-	}
-
-	serverCfg, err := appconfig.GetServer(cfg, serverName)
-	if err != nil {
-		return err
-	}
-
-	user, pass, err := auth.ResolveCreds(serverCfg, auth.CredTypeCUPI)
-	if err != nil {
-		return fmt.Errorf("failed to resolve credentials: %w", err)
-	}
-
-	tftpInfos, err := client.GetASTTftpInfo(serverCfg.Host, user, pass)
+	tftpInfos, err := client.GetASTTftpInfo(srv.Host, user, pass)
 	if err != nil {
 		return fmt.Errorf("failed to get TFTP info: %w", err)
 	}
@@ -114,27 +82,12 @@ var astHeartbeatCmd = &cobra.Command{
 }
 
 func runASTHeartbeat(cmd *cobra.Command, args []string) error {
-	serverName, err := resolveServer(cmd)
+	srv, user, pass, err := resolveCredentials(cmd, "cupi")
 	if err != nil {
 		return err
 	}
 
-	cfg, err := appconfig.LoadConfig()
-	if err != nil {
-		return fmt.Errorf("failed to load config: %w", err)
-	}
-
-	serverCfg, err := appconfig.GetServer(cfg, serverName)
-	if err != nil {
-		return err
-	}
-
-	user, pass, err := auth.ResolveCreds(serverCfg, auth.CredTypeCUPI)
-	if err != nil {
-		return fmt.Errorf("failed to resolve credentials: %w", err)
-	}
-
-	heartbeats, err := client.GetASTHeartbeat(serverCfg.Host, user, pass)
+	heartbeats, err := client.GetASTHeartbeat(srv.Host, user, pass)
 	if err != nil {
 		return fmt.Errorf("failed to get heartbeat info: %w", err)
 	}
