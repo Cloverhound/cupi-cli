@@ -1,6 +1,9 @@
 # Binary
 cupi
 
+# Integration tests (require live CUC server — not committed)
+tests/
+
 # Go build artifacts
 *.test
 *.out
