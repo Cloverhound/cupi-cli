@@ -1,7 +1,7 @@
 # cupi
 
 A command-line tool for querying and managing Cisco Unity Connection (CUC) voicemail servers via CUPI REST, PAWS, AST, and DIME APIs.
-
+ 
 ## Install
 
 **macOS / Linux**
