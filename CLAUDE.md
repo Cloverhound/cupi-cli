@@ -25,10 +25,16 @@ Go CLI tool (`cupi`) for Cisco Unity Connection (CUC). Wraps:
 ## Development
 
 ```bash
-go build -o cupi .        # Build
+go build -o cupi .        # Build (Version reports "dev")
 ./cupi --help             # Verify
-bash install-local.sh         # Install binary + skill
+./cupi version            # Print version
+./cupi upgrade --check    # Check for newer release on GitHub
+bash install-local.sh     # Install binary (embeds git tag as version) + skill
 go run ./tools/scraper/   # Run API doc scraper
+go test ./tests/ -run TestCLI  # Run CLI validation tests (no live server needed)
+
+# Build with explicit version:
+go build -ldflags "-X github.com/Cloverhound/cupi-cli/cmd.Version=v1.2.3" -o cupi .
 ```
 
 ## Architecture

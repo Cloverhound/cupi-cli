@@ -19,8 +19,10 @@ var (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cupi",
-	Short: "Cisco Unity Connection CLI management tool",
+	Use:          "cupi",
+	Short:        "Cisco Unity Connection CLI management tool",
+	SilenceUsage: true,  // don't print usage on runtime errors
+	SilenceErrors: true, // main.go prints errors; suppress cobra's duplicate
 	Long: `cupi is a command-line tool for querying and managing Cisco Unity Connection (CUC) servers.
 It provides access to CUPI REST, PAWS, AST, and DIME APIs for voicemail user, distribution list, and system management.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {

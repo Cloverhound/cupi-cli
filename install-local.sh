@@ -12,7 +12,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "==> Building $BINARY..."
-go build -o "$BINARY" .
+VERSION=$(git describe --tags --always --dirty 2>/dev/null || echo "dev")
+go build -ldflags "-X github.com/Cloverhound/cupi-cli/cmd.Version=${VERSION}" -o "$BINARY" .
 
 echo "==> Installing binary to $INSTALL_DIR/$BINARY"
 mkdir -p "$INSTALL_DIR"

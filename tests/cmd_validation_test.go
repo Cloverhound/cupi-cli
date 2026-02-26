@@ -969,3 +969,71 @@ func TestCLIVersionOrHelpDoesNotCrash(t *testing.T) {
 		t.Error("root --help produced empty output")
 	}
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// version command
+// ─────────────────────────────────────────────────────────────────────────────
+
+func TestCLIVersionCommandRegistered(t *testing.T) {
+	out, ok := runCupi("--help")
+	assertSuccess(t, out, ok)
+	if !strings.Contains(out, "version") {
+		t.Error("'version' command not listed in root help")
+	}
+}
+
+func TestCLIVersionPrintsBinaryName(t *testing.T) {
+	out, ok := runCupi("version")
+	assertSuccess(t, out, ok)
+	if !strings.Contains(out, "cupi") {
+		t.Errorf("version output should contain 'cupi', got: %q", out)
+	}
+}
+
+func TestCLIVersionHelp(t *testing.T) {
+	out, ok := runCupi("version", "--help")
+	assertSuccess(t, out, ok)
+	if !strings.Contains(out, "version") {
+		t.Errorf("version --help missing 'version' text, got: %q", out)
+	}
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// upgrade command
+// ─────────────────────────────────────────────────────────────────────────────
+
+func TestCLIUpgradeCommandRegistered(t *testing.T) {
+	out, ok := runCupi("--help")
+	assertSuccess(t, out, ok)
+	if !strings.Contains(out, "upgrade") {
+		t.Error("'upgrade' command not listed in root help")
+	}
+}
+
+func TestCLIUpgradeHelp(t *testing.T) {
+	out, ok := runCupi("upgrade", "--help")
+	assertSuccess(t, out, ok)
+	for _, want := range []string{"upgrade", "--check", "GitHub"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("upgrade --help missing %q, got: %q", want, out)
+		}
+	}
+}
+
+func TestCLIUpgradeCheckFlag(t *testing.T) {
+	// --check attempts to reach GitHub; we accept either outcome since CI may not
+	// have network access or the repo may have no releases yet.
+	out, _ := runCupi("upgrade", "--check")
+	if !strings.Contains(out, "cupi") {
+		t.Errorf("upgrade --check output should reference 'cupi', got: %q", out)
+	}
+}
+
+func TestCLIUpgradeNoExtraArgs(t *testing.T) {
+	// upgrade takes no positional args
+	out, ok := runCupi("upgrade", "--help")
+	assertSuccess(t, out, ok)
+	if strings.Contains(out, "<arg>") {
+		t.Error("upgrade help should not show positional arg placeholder")
+	}
+}
