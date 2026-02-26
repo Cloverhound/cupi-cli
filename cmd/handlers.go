@@ -16,4 +16,7 @@ func init() {
 	handlersCmd.AddCommand(handlersAddCmd)
 	handlersCmd.AddCommand(handlersUpdateCmd)
 	handlersCmd.AddCommand(handlersRemoveCmd)
+	handlersCmd.AddCommand(handlersGreetingsCmd)
+	handlersCmd.AddCommand(handlersMenuentriesCmd)
+	handlersCmd.AddCommand(handlersTransferoptionsCmd)
 }

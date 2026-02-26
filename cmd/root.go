@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Cloverhound/cupi-cli/internal/appconfig"
+	"github.com/Cloverhound/cupi-cli/internal/auth"
 	"github.com/spf13/cobra"
 )
 
@@ -57,6 +58,21 @@ func init() {
 	rootCmd.AddCommand(pawsCmd)
 	rootCmd.AddCommand(astCmd)
 	rootCmd.AddCommand(dimeCmd)
+	rootCmd.AddCommand(dirhandlersCmd)
+	rootCmd.AddCommand(inthandlersCmd)
+	rootCmd.AddCommand(routingRulesCmd)
+	rootCmd.AddCommand(partitionsCmd)
+	rootCmd.AddCommand(searchSpacesCmd)
+	rootCmd.AddCommand(phoneSystemsCmd)
+	rootCmd.AddCommand(portGroupsCmd)
+	rootCmd.AddCommand(portsCmd)
+	rootCmd.AddCommand(restrictionTablesCmd)
+	rootCmd.AddCommand(rolesCmd)
+	rootCmd.AddCommand(authRulesCmd)
+	rootCmd.AddCommand(configValuesCmd)
+	rootCmd.AddCommand(callHandlerTemplatesCmd)
+	rootCmd.AddCommand(smtpCmd)
+	rootCmd.AddCommand(alternateNamesCmd)
 }
 
 // resolveServer returns the server name to use.
@@ -80,4 +96,25 @@ func resolveServer(cmd *cobra.Command) (string, error) {
 
 func loadConfig() (*appconfig.Config, error) {
 	return appconfig.LoadConfig()
+}
+
+// resolveCredentials resolves server config and credentials for the given credType.
+func resolveCredentials(cmd *cobra.Command, credType string) (*appconfig.ServerConfig, string, string, error) {
+	serverName, err := resolveServer(cmd)
+	if err != nil {
+		return nil, "", "", err
+	}
+	cfg, err := appconfig.LoadConfig()
+	if err != nil {
+		return nil, "", "", err
+	}
+	srv, err := appconfig.GetServer(cfg, serverName)
+	if err != nil {
+		return nil, "", "", err
+	}
+	user, pass, err := auth.ResolveCreds(srv, credType)
+	if err != nil {
+		return nil, "", "", err
+	}
+	return srv, user, pass, nil
 }

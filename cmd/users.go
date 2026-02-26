@@ -16,4 +16,11 @@ func init() {
 	usersCmd.AddCommand(usersAddCmd)
 	usersCmd.AddCommand(usersUpdateCmd)
 	usersCmd.AddCommand(usersRemoveCmd)
+	usersCmd.AddCommand(usersAltextsCmd)
+	usersCmd.AddCommand(usersMwiCmd)
+	usersCmd.AddCommand(usersPrivatelistsCmd)
+	usersCmd.AddCommand(usersRolesCmd)
+	usersCmd.AddCommand(usersCredentialCmd)
+	usersCmd.AddCommand(usersMailboxCmd)
+	usersCmd.AddCommand(usersNotificationsCmd)
 }
