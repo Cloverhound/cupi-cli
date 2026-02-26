@@ -20,3 +20,6 @@ api_reference.md
 .vscode/
 *.swp
 *.swo
+
+# Claude Code
+.claude/
