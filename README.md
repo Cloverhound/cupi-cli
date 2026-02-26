@@ -4,19 +4,27 @@ A command-line tool for querying and managing Cisco Unity Connection (CUC) voice
 
 ## Install
 
+**macOS / Linux**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Cloverhound/cupi-cli/main/install.sh | bash
+```
+
+**Windows (PowerShell)**
+
+```powershell
+irm https://raw.githubusercontent.com/Cloverhound/cupi-cli/main/install.ps1 | iex
+```
+
 **From source**
 
 ```bash
-git clone https://github.com/Cloverhound/cupi.git
-cd cupi
-bash install-local.sh
-```
-
-Or build manually:
-
-```bash
+git clone https://github.com/Cloverhound/cupi-cli.git
+cd cupi-cli
 go build -o cupi .
 ```
+
+Releases for macOS, Linux, and Windows (amd64 and arm64) are published on the [Releases](https://github.com/Cloverhound/cupi-cli/releases) page.
 
 ## Quick Start
 
