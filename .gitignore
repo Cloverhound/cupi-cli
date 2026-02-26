@@ -1,8 +1,8 @@
 # Binary
 cupi
 
-# Integration tests (require live CUC server — not committed)
-tests/
+# Integration test binaries/artifacts
+*.test
 
 # Go build artifacts
 *.test
