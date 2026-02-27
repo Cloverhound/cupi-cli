@@ -3,6 +3,7 @@ set -euo pipefail
 
 REPO="Cloverhound/cupi-cli"
 BINARY="cupi"
+SKILL_NAME="cupi"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 
 # Detect OS and architecture
@@ -45,7 +46,7 @@ TMPDIR="$(mktemp -d)"
 curl -fsSL "$URL" -o "${TMPDIR}/${ARCHIVE}"
 tar -xzf "${TMPDIR}/${ARCHIVE}" -C "$TMPDIR"
 
-# Install
+# Install binary
 mkdir -p "$INSTALL_DIR"
 mv "${TMPDIR}/${BINARY}" "${INSTALL_DIR}/${BINARY}"
 chmod +x "${INSTALL_DIR}/${BINARY}"
@@ -61,5 +62,59 @@ if ! echo "$PATH" | grep -q "$INSTALL_DIR"; then
   echo "  export PATH=\"\$PATH:${INSTALL_DIR}\""
 fi
 
+# ── Skill installation wizard ─────────────────────────────────────────────────
 echo ""
+
+SKILL_URL="https://raw.githubusercontent.com/${REPO}/${TAG}/skill/SKILL.md"
+SKILL_TMP="$(mktemp)"
+
+if ! curl -fsSL "$SKILL_URL" -o "$SKILL_TMP" 2>/dev/null; then
+  echo "Warning: Could not download skill file. Skipping skill installation."
+  rm -f "$SKILL_TMP"
+  echo ""
+  echo "Run 'cupi --help' to get started."
+  exit 0
+fi
+
+echo "==> Install skill file for AI coding assistants?"
+echo "    Press Enter to install at the shown path, type a new path to override, or 'n' to skip."
+echo ""
+
+# Format: "Display Name|default/path/SKILL.md"
+TOOLS=(
+  "Claude Code|${HOME}/.claude/skills/${SKILL_NAME}/SKILL.md"
+  "Codex|${HOME}/.codex/skills/${SKILL_NAME}/SKILL.md"
+  "Gemini|${HOME}/.gemini/skills/${SKILL_NAME}/SKILL.md"
+)
+
+for entry in "${TOOLS[@]}"; do
+  TOOL_NAME="${entry%%|*}"
+  DEFAULT_PATH="${entry#*|}"
+
+  echo "  ${TOOL_NAME}"
+  printf "    Path : %s\n    > " "$DEFAULT_PATH"
+
+  # Read from /dev/tty so this works when the script is piped via curl | bash
+  read -r RESPONSE </dev/tty
+
+  case "$RESPONSE" in
+    n|N|no|No|NO|skip)
+      echo "    Skipped."
+      ;;
+    "")
+      mkdir -p "$(dirname "$DEFAULT_PATH")"
+      cp "$SKILL_TMP" "$DEFAULT_PATH"
+      echo "    Installed → ${DEFAULT_PATH}"
+      ;;
+    *)
+      mkdir -p "$(dirname "$RESPONSE")"
+      cp "$SKILL_TMP" "$RESPONSE"
+      echo "    Installed → ${RESPONSE}"
+      ;;
+  esac
+  echo ""
+done
+
+rm -f "$SKILL_TMP"
+
 echo "Run 'cupi --help' to get started."
