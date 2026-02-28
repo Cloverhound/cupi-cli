@@ -15,7 +15,7 @@ type SMTPServerConfig struct {
 
 type smtpServerConfigsResponse struct {
 	Total string               `json:"@total"`
-	Items []SMTPServerConfig   `json:"SMTPServerConfig"`
+	Items OneOrMany[SMTPServerConfig] `json:"SMTPServerConfig"`
 }
 
 // SMTPClientConfig represents SMTP client configuration
@@ -28,7 +28,7 @@ type SMTPClientConfig struct {
 
 type smtpClientConfigsResponse struct {
 	Total string               `json:"@total"`
-	Items []SMTPClientConfig   `json:"SMTPClientConfig"`
+	Items OneOrMany[SMTPClientConfig] `json:"SMTPClientConfig"`
 }
 
 // GetSMTPServerConfig retrieves SMTP server configuration

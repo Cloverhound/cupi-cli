@@ -16,7 +16,7 @@ type AlternateName struct {
 
 type alternateNamesResponse struct {
 	Total string         `json:"@total"`
-	Items []AlternateName `json:"AlternateName"`
+	Items OneOrMany[AlternateName] `json:"AlternateName"`
 }
 
 // ListAlternateNames returns alternate names for a user

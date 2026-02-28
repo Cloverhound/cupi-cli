@@ -16,7 +16,7 @@ type ConfigValue struct {
 
 type configValuesResponse struct {
 	Total string       `json:"@total"`
-	Items []ConfigValue `json:"ConfigurationValue"`
+	Items OneOrMany[ConfigValue] `json:"ConfigurationValue"`
 }
 
 // ListConfigValues returns configuration values

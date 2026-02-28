@@ -15,7 +15,7 @@ type CustomRole struct {
 
 type customRolesResponse struct {
 	Total string       `json:"@total"`
-	Items []CustomRole `json:"CustomRole"`
+	Items OneOrMany[CustomRole] `json:"CustomRole"`
 }
 
 // ListCustomRoles returns all custom roles

@@ -15,7 +15,7 @@ type Schedule struct {
 
 type schedulesResponse struct {
 	Total     string     `json:"@total"`
-	Schedules []Schedule `json:"Schedule"`
+	Schedules OneOrMany[Schedule] `json:"Schedule"`
 }
 
 // ListSchedules returns CUC schedules.

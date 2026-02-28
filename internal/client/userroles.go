@@ -15,7 +15,7 @@ type UserRole struct {
 
 type userRolesResponse struct {
 	Total string     `json:"@total"`
-	Items []UserRole `json:"UserRole"`
+	Items OneOrMany[UserRole] `json:"UserRole"`
 }
 
 // Role represents a role in the system
@@ -27,7 +27,7 @@ type Role struct {
 
 type rolesResponse struct {
 	Total string `json:"@total"`
-	Items []Role `json:"Role"`
+	Items OneOrMany[Role] `json:"Role"`
 }
 
 // ListUserRoles returns all roles assigned to a user

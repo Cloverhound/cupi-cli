@@ -16,7 +16,7 @@ type CallHandler struct {
 
 type callHandlersResponse struct {
 	Total    string        `json:"@total"`
-	Handlers []CallHandler `json:"Callhandler"`
+	Handlers OneOrMany[CallHandler] `json:"Callhandler"`
 }
 
 // ListCallHandlers returns CUC call handlers.

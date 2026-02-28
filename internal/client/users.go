@@ -22,7 +22,7 @@ type User struct {
 
 type usersListResponse struct {
 	Total string `json:"@total"`
-	Users []User `json:"User"`
+	Users OneOrMany[User] `json:"User"`
 }
 
 // ListUsers returns CUC users, optionally with a search query and row limit.

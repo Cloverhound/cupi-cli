@@ -15,7 +15,7 @@ type PhoneSystem struct {
 
 type phoneSystemsResponse struct {
 	Total string       `json:"@total"`
-	Items []PhoneSystem `json:"PhoneSystem"`
+	Items OneOrMany[PhoneSystem] `json:"PhoneSystem"`
 }
 
 // AXLServer represents an AXL server in a phone system
@@ -27,7 +27,7 @@ type AXLServer struct {
 
 type axlServersResponse struct {
 	Total string      `json:"@total"`
-	Items []AXLServer `json:"AXLServer"`
+	Items OneOrMany[AXLServer] `json:"AXLServer"`
 }
 
 // ListPhoneSystems returns all phone systems

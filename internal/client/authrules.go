@@ -16,7 +16,7 @@ type AuthRule struct {
 
 type authRulesResponse struct {
 	Total string     `json:"@total"`
-	Items []AuthRule `json:"AuthenticationRule"`
+	Items OneOrMany[AuthRule] `json:"AuthenticationRule"`
 }
 
 // ListAuthRules returns all authentication rules

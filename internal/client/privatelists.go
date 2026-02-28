@@ -15,7 +15,7 @@ type PrivateList struct {
 
 type privateListsResponse struct {
 	Total string        `json:"@total"`
-	Items []PrivateList `json:"PrivateList"`
+	Items OneOrMany[PrivateList] `json:"PrivateList"`
 }
 
 // PrivateListMember represents a member of a private list
@@ -27,7 +27,7 @@ type PrivateListMember struct {
 
 type privateListMembersResponse struct {
 	Total string               `json:"@total"`
-	Items []PrivateListMember  `json:"PrivateListMember"`
+	Items OneOrMany[PrivateListMember] `json:"PrivateListMember"`
 }
 
 // ListPrivateLists returns all private lists for a user

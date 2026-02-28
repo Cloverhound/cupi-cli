@@ -16,7 +16,7 @@ type DistList struct {
 
 type distListsResponse struct {
 	Total     string     `json:"@total"`
-	DistLists []DistList `json:"DistributionList"`
+	DistLists OneOrMany[DistList] `json:"DistributionList"`
 }
 
 // DistListMember represents a member of a distribution list
@@ -28,7 +28,7 @@ type DistListMember struct {
 
 type distListMembersResponse struct {
 	Total   string           `json:"@total"`
-	Members []DistListMember `json:"DistributionListMember"`
+	Members OneOrMany[DistListMember] `json:"DistributionListMember"`
 }
 
 // ListDistLists returns CUC distribution lists.

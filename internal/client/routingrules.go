@@ -18,7 +18,7 @@ type RoutingRule struct {
 
 type routingRulesResponse struct {
 	Total string        `json:"@total"`
-	Items []RoutingRule `json:"RoutingRule"`
+	Items OneOrMany[RoutingRule] `json:"RoutingRule"`
 }
 
 // RoutingRuleCondition represents a condition in a routing rule
@@ -31,7 +31,7 @@ type RoutingRuleCondition struct {
 
 type routingRuleConditionsResponse struct {
 	Total string                  `json:"@total"`
-	Items []RoutingRuleCondition  `json:"RoutingRuleCondition"`
+	Items OneOrMany[RoutingRuleCondition] `json:"RoutingRuleCondition"`
 }
 
 // ListRoutingRules returns all routing rules

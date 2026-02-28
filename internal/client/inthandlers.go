@@ -16,7 +16,7 @@ type InterviewHandler struct {
 
 type interviewHandlersResponse struct {
 	Total string             `json:"@total"`
-	Items []InterviewHandler `json:"InterviewHandler"`
+	Items OneOrMany[InterviewHandler] `json:"InterviewHandler"`
 }
 
 // InterviewQuestion represents a question in an interview handler
@@ -27,7 +27,7 @@ type InterviewQuestion struct {
 
 type interviewQuestionsResponse struct {
 	Total string              `json:"@total"`
-	Items []InterviewQuestion `json:"InterviewQuestion"`
+	Items OneOrMany[InterviewQuestion] `json:"InterviewQuestion"`
 }
 
 // ListInterviewHandlers returns interview handlers

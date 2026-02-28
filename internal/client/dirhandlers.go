@@ -15,7 +15,7 @@ type DirectoryHandler struct {
 
 type directoryHandlersResponse struct {
 	Total string              `json:"@total"`
-	Items []DirectoryHandler  `json:"DirectoryHandler"`
+	Items OneOrMany[DirectoryHandler] `json:"DirectoryHandler"`
 }
 
 // ListDirectoryHandlers returns directory handlers

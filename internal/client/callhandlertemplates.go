@@ -15,7 +15,7 @@ type CallHandlerTemplate struct {
 
 type callHandlerTemplatesResponse struct {
 	Total string                 `json:"@total"`
-	Items []CallHandlerTemplate  `json:"CallhandlerTemplate"`
+	Items OneOrMany[CallHandlerTemplate] `json:"CallhandlerTemplate"`
 }
 
 // ListCallHandlerTemplates returns call handler templates

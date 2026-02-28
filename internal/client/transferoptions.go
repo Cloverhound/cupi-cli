@@ -17,7 +17,7 @@ type TransferOption struct {
 
 type transferOptionsResponse struct {
 	Total string           `json:"@total"`
-	Items []TransferOption `json:"TransferOption"`
+	Items OneOrMany[TransferOption] `json:"TransferOption"`
 }
 
 // ListTransferOptions returns all transfer options for a call handler

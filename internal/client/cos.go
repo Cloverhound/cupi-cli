@@ -14,7 +14,7 @@ type COS struct {
 
 type cosListResponse struct {
 	Total string `json:"@total"`
-	COSes []COS  `json:"Cos"`
+	COSes OneOrMany[COS] `json:"Cos"`
 }
 
 // ListCOS returns CUC classes of service.

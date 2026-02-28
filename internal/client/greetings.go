@@ -16,7 +16,7 @@ type Greeting struct {
 
 type greetingsResponse struct {
 	Total string     `json:"@total"`
-	Items []Greeting `json:"Greeting"`
+	Items OneOrMany[Greeting] `json:"Greeting"`
 }
 
 // ListGreetings returns all greetings for a call handler

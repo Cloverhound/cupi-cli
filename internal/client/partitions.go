@@ -15,7 +15,7 @@ type Partition struct {
 
 type partitionsResponse struct {
 	Total string      `json:"@total"`
-	Items []Partition `json:"Partition"`
+	Items OneOrMany[Partition] `json:"Partition"`
 }
 
 // ListPartitions returns all partitions

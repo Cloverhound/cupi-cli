@@ -16,7 +16,7 @@ type AlternateExtension struct {
 
 type alternateExtensionsResponse struct {
 	Total string                 `json:"@total"`
-	Items []AlternateExtension   `json:"AlternateExtension"`
+	Items OneOrMany[AlternateExtension] `json:"AlternateExtension"`
 }
 
 // ListAlternateExtensions returns alternate extensions for a user

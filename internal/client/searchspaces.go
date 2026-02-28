@@ -15,7 +15,7 @@ type SearchSpace struct {
 
 type searchSpacesResponse struct {
 	Total string       `json:"@total"`
-	Items []SearchSpace `json:"SearchSpace"`
+	Items OneOrMany[SearchSpace] `json:"SearchSpace"`
 }
 
 // SearchSpaceMember represents a partition member in a search space
@@ -27,7 +27,7 @@ type SearchSpaceMember struct {
 
 type searchSpaceMembersResponse struct {
 	Total string              `json:"@total"`
-	Items []SearchSpaceMember `json:"SearchSpaceMember"`
+	Items OneOrMany[SearchSpaceMember] `json:"SearchSpaceMember"`
 }
 
 // ListSearchSpaces returns all search spaces

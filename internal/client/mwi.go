@@ -17,7 +17,7 @@ type MWI struct {
 
 type mwisResponse struct {
 	Total string `json:"@total"`
-	Items []MWI  `json:"MWI"`
+	Items OneOrMany[MWI] `json:"MWI"`
 }
 
 // ListMWIs returns all MWIs for a user

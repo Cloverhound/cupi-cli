@@ -14,7 +14,7 @@ type RestrictionTable struct {
 
 type restrictionTablesResponse struct {
 	Total string             `json:"@total"`
-	Items []RestrictionTable `json:"RestrictionTable"`
+	Items OneOrMany[RestrictionTable] `json:"RestrictionTable"`
 }
 
 // RestrictionPattern represents a pattern in a restriction table
@@ -27,7 +27,7 @@ type RestrictionPattern struct {
 
 type restrictionPatternsResponse struct {
 	Total string               `json:"@total"`
-	Items []RestrictionPattern `json:"RestrictionPattern"`
+	Items OneOrMany[RestrictionPattern] `json:"RestrictionPattern"`
 }
 
 // ListRestrictionTables returns all restriction tables

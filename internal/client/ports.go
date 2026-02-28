@@ -18,7 +18,7 @@ type Port struct {
 
 type portsResponse struct {
 	Total string `json:"@total"`
-	Items []Port `json:"Port"`
+	Items OneOrMany[Port] `json:"Port"`
 }
 
 // ListPorts returns all ports

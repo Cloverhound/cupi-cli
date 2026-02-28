@@ -15,7 +15,7 @@ type UserTemplate struct {
 
 type userTemplatesResponse struct {
 	Total     string         `json:"@total"`
-	Templates []UserTemplate `json:"UserTemplate"`
+	Templates OneOrMany[UserTemplate] `json:"UserTemplate"`
 }
 
 // ListUserTemplates returns CUC user templates.

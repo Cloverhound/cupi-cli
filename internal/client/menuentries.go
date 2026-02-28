@@ -16,7 +16,7 @@ type MenuEntry struct {
 
 type menuEntriesResponse struct {
 	Total string      `json:"@total"`
-	Items []MenuEntry `json:"MenuItem"`
+	Items OneOrMany[MenuEntry] `json:"MenuItem"`
 }
 
 // ListMenuEntries returns all menu entries for a call handler

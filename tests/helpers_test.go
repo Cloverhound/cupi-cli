@@ -18,7 +18,6 @@
 package tests
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -57,7 +56,12 @@ func getTestEnv(t *testing.T) testEnv {
 }
 
 // uniqueSuffix returns a short timestamp-based suffix for unique test object names.
+// If CUPI_TEST_SUFFIX is set, that value is used instead — enabling a two-phase
+// run where Add/Modify and Delete are invoked separately but share the same alias.
 func uniqueSuffix() string {
+	if s := os.Getenv("CUPI_TEST_SUFFIX"); s != "" {
+		return s
+	}
 	return fmt.Sprintf("%d", time.Now().UnixNano()%1_000_000_000)
 }
 
@@ -65,19 +69,33 @@ func uniqueSuffix() string {
 // call handler template. Skips the test if none are found.
 func getFirstCallHandlerTemplateID(t *testing.T, env testEnv) string {
 	t.Helper()
-	body, err := client.Get(env.Host, env.Port, env.User, env.Pass, "/callhandlertemplates?rowsPerPage=1")
+	templates, err := client.ListCallHandlerTemplates(env.Host, env.Port, env.User, env.Pass, "", 1)
 	if err != nil {
 		t.Skipf("could not list call handler templates: %v", err)
 	}
-	var resp struct {
-		Templates []struct {
-			ObjectId string `json:"ObjectId"`
-		} `json:"CallhandlerTemplate"`
-	}
-	if err := json.Unmarshal(body, &resp); err != nil || len(resp.Templates) == 0 {
+	if len(templates) == 0 {
 		t.Skip("no call handler templates found on this server")
 	}
-	return resp.Templates[0].ObjectId
+	return templates[0].ObjectId
+}
+
+// getDistListMemberObjectID returns the ObjectId of a system distribution list
+// (e.g. allvoicemailusers) that can be used as a member of the test list.
+// Using a distlist as a member avoids user-license constraints. Skips if none found.
+func getDistListMemberObjectID(t *testing.T, env testEnv) string {
+	t.Helper()
+	lists, err := client.ListDistLists(env.Host, env.Port, env.User, env.Pass, "", 10)
+	if err != nil {
+		t.Skipf("could not list distribution lists: %v", err)
+	}
+	// Skip the test list itself (prefix cupi-tl-) and return the first system list.
+	for _, dl := range lists {
+		if len(dl.Alias) > 0 && dl.Alias[:7] != "cupi-tl" {
+			return dl.ObjectId
+		}
+	}
+	t.Skip("no system distribution list available to use as distlist member")
+	return ""
 }
 
 // verifyConnectivity does a lightweight auth check — fails fast with a clear message.

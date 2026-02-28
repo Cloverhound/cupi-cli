@@ -16,10 +16,10 @@ type NotificationDevice struct {
 // listNotificationDevicesResponse handles generic notification device list responses
 type listNotificationDevicesResponse struct {
 	Total       string                  `json:"@total"`
-	PhoneDevices []NotificationDevice   `json:"PhoneDevice"`
-	PagerDevices []NotificationDevice   `json:"PagerDevice"`
-	SmtpDevices  []NotificationDevice   `json:"SmtpDevice"`
-	HtmlDevices  []NotificationDevice   `json:"HtmlDevice"`
+	PhoneDevices OneOrMany[NotificationDevice]   `json:"PhoneDevice"`
+	PagerDevices OneOrMany[NotificationDevice]   `json:"PagerDevice"`
+	SmtpDevices  OneOrMany[NotificationDevice]   `json:"SmtpDevice"`
+	HtmlDevices  OneOrMany[NotificationDevice]   `json:"HtmlDevice"`
 }
 
 // getDeviceKey returns the JSON key for the given device type
